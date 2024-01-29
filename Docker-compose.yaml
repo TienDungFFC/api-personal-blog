@@ -1,0 +1,58 @@
+version: "3.7"
+name: dungnt-blog
+
+networks:
+  dungnt-blog-network:
+    driver: bridge
+
+services:
+  app:
+    build: ./deployment/php
+    restart: unless-stopped
+    container_name: dungnt-blog-app
+    tty: true
+    networks:
+      - dungnt-blog-network
+    volumes:
+      - .:/var/www/app
+
+  nginx:
+    image: nginx
+    container_name: dungnt-blog-nginx
+    restart: unless-stopped
+    tty: true
+    depends_on:
+      - app
+    ports:
+      - "8081:80"
+    networks:
+      - dungnt-blog-network
+    volumes:
+      - .:/var/www/app
+      - ./deployment/nginx/default.conf:/etc/nginx/conf.d/default.conf
+
+  mongo:
+    image: mongo:latest
+    container_name: dungnt-blog-mongo
+    ports: 
+      - "27017:27017"
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh mongodb:27017 --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  # redis:
+  #   image: bitnami/redis:latest
+  #   restart: unless-stopped
+  #   container_name: dungnt-blog-redis
+  #   tty: true
+  #   ports:
+  #     - "6379:6379"
+  #   networks:
+  #     - dungnt-blog-network
+  #   volumes:
+  #     - ./docker/redis:/bitnami/redis/data
+  #   environment:
+  #     ALLOW_EMPTY_PASSWORD: ${REDIS_ALLOW_EMPTY_PASSWORD:-no}
+  #     REDIS_PASSWORD: ${REDIS_PASSWORD:-redis}
