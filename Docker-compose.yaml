@@ -41,7 +41,9 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
-
+    networks:
+      - dungnt-blog-network
+      
   # redis:
   #   image: bitnami/redis:latest
   #   restart: unless-stopped
