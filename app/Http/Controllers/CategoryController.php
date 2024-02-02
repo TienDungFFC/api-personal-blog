@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\CategoryService;
-use Illuminate\Http\Request;
+use App\Http\Requests\UpsertCategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -14,7 +14,7 @@ class CategoryController extends Controller
         return $this->categoryService->getAll();
     }
 
-    public function store(Request $request) {
+    public function store(UpsertCategoryRequest $request) {
         $categoryInput = $request->all();
         return $this->categoryService->createCategory($categoryInput);
     }
