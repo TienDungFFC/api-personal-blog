@@ -39,6 +39,7 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=123456
+      - MONGO_INITDB_DATABASE=personal_blog
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh mongodb:27017 --quiet
       interval: 10s
