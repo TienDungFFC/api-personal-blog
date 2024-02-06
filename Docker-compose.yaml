@@ -36,6 +36,9 @@ services:
     container_name: dungnt-blog-mongo
     ports: 
       - "27018:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=123456
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh mongodb:27017 --quiet
       interval: 10s

@@ -26,8 +26,9 @@ Route::post('login', [AuthController::class, 'login']);
 
 Route::get('categories', [CategoryController::class, 'index']);
 Route::post('categories', [CategoryController::class, 'store']);
+Route::get('posts', [PostController::class, 'index']);
+Route::post('posts', [PostController::class, 'store']);
 
 Route::middleware('auth')->group(function() {
-    Route::post('posts', [PostController::class, 'store']);
 });
 
