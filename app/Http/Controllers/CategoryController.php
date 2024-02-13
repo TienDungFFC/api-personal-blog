@@ -17,6 +17,6 @@ class CategoryController extends Controller
 
     public function store(UpsertCategoryRequest $request) {
         $categoryInput = $request->all();
-        return $this->categoryService->createCategory($categoryInput);
+        return CategoryResource::make($this->categoryService->createCategory($categoryInput));
     }
 }
