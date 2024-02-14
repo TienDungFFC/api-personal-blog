@@ -13,7 +13,7 @@ class PostController extends Controller
     }
 
     public function index() {
-
+        return PostResource::collection($this->post->getAll());
     }
 
     public function store(UpsertPostRequest $request) {
