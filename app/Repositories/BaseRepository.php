@@ -21,6 +21,14 @@ abstract class BaseRepository implements BaseRepositoryInterface {
         return $this->model->create($data);
     }
 
+    public function insert(array $data) {
+        return $this->model->insert($data);
+    }
+
+    public function findMultiple($field, array $conditions) {
+        return $this->model->whereIn($field, $conditions);
+    }
+
     public function update($id, array $data) {
         $model = $this->model->find($id);
         $model->update($data);

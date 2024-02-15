@@ -5,7 +5,10 @@ namespace App\Services;
 use App\Repositories\Post\PostRepository;
 
 class PostService {
-    public function __construct(private PostRepository $postRepo) {}
+    public function __construct(
+        private PostRepository $postRepo,
+        private TagService $tagService
+    ) {}
 
     public function createPost($postInput) {
         $content = !empty($postInput['content']) ? $postInput['content'] : '';
@@ -13,7 +16,7 @@ class PostService {
         $categoryData = !empty($postInput['category']) ? $postInput['category'] : null;
         $author = $postInput['user'];
         $tags = $postInput['tags'];
-        $categoryData = [
+        $postData = [
             'title' => $postInput['title'] ?? '',
             'slug' => $postInput['title'],
             'description' => !empty($postInput['description']) ? $postInput['description'] : '',
@@ -26,7 +29,9 @@ class PostService {
             'status' => !empty($postInput['status']) ? $postInput['status'] : 0,
             'parent_id' => null
         ];
-        return $this->postRepo->create($categoryData);
+        $newPost = $this->postRepo->create($postData);
+        $this->tagService->addNewTagIfExist($newPost['tags']);
+        return $newPost;
     }
 
     public function getAll() {
