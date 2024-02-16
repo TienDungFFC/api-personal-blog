@@ -7,27 +7,32 @@ use App\Repositories\Post\PostRepository;
 class PostService {
     public function __construct(
         private PostRepository $postRepo,
-        private TagService $tagService
+        private TagService $tagService,
+        private CategoryService $categoryService
     ) {}
+    
+    const DESCRIPTION_LENGTH = 200;
 
     public function createPost($postInput) {
         $content = !empty($postInput['content']) ? $postInput['content'] : '';
         $thumb = !empty($postInput['thumb']) ? $postInput['thumb'] : '';
-        $categoryData = !empty($postInput['category']) ? $postInput['category'] : null;
-        $author = $postInput['user'];
+        $categoryId = !empty($postInput['categoryId']) ? $postInput['categoryId'] : null;
+        //TODO: get info author later
+        // $author = $postInput['user'];
         $tags = $postInput['tags'];
         $postData = [
             'title' => $postInput['title'] ?? '',
-            'slug' => $postInput['title'],
-            'description' => !empty($postInput['description']) ? $postInput['description'] : '',
+            'slug' => create_slug($postInput['title']),
+            'description' => getCharactersWithOutHTMLTags($content, self::DESCRIPTION_LENGTH) . '...',
             'content' => $content,
             'thumbnail' => $thumb,
-            'category' => $categoryData,
-            'category_slug' => !empty($categoryData['slug']) ? $categoryData['slug'] : '',
-            'author' => $author,
+            'category' => $this->categoryService->getCategory($categoryId),
+            'author' => [
+                'slug' => 'admin',
+                'name' => 'Admin'
+            ],
             'tags' => $tags,
             'status' => !empty($postInput['status']) ? $postInput['status'] : 0,
-            'parent_id' => null
         ];
         $newPost = $this->postRepo->create($postData);
         $this->tagService->addNewTagIfExist($newPost['tags']);

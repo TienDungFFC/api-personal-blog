@@ -19,4 +19,8 @@ class CategoryService {
     public function getAll() {
         return $this->categoryRepo->all();
     }
+
+    public function getCategory($id) {
+        return $this->categoryRepo->find($id);
+    }
 }
