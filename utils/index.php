@@ -1,7 +1,7 @@
 <?php
 
-if (!function_exists('create_slug')) {
-    function create_slug($string)
+if (!function_exists('createSlug')) {
+    function createSlug($string)
     {
         $search = array(
             '#(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)#',

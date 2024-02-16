@@ -22,16 +22,16 @@ class PostService {
         $tags = $postInput['tags'];
         $postData = [
             'title' => $postInput['title'] ?? '',
-            'slug' => create_slug($postInput['title']),
+            'slug' => createSlug($postInput['title']),
             'description' => getCharactersWithOutHTMLTags($content, self::DESCRIPTION_LENGTH) . '...',
             'content' => $content,
             'thumbnail' => $thumb,
-            'category' => $this->categoryService->getCategory($categoryId),
+            'category' => $this->categoryService->getCategory($categoryId)->first()->toArray(),
             'author' => [
                 'slug' => 'admin',
                 'name' => 'Admin'
             ],
-            'tags' => $tags,
+            'tags' => $this->tagService->addSlugTag($tags),
             'status' => !empty($postInput['status']) ? $postInput['status'] : 0,
         ];
         $newPost = $this->postRepo->create($postData);
