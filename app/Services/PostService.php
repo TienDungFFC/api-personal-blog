@@ -13,6 +13,14 @@ class PostService {
     
     const DESCRIPTION_LENGTH = 200;
 
+    public function index() {
+        return $this->postRepo->paginate(); 
+    }
+
+    public function getPostByCate(string $cate) {
+        return $this->postRepo->getPostByCate($cate);
+    }
+
     public function createPost($postInput) {
         $content = !empty($postInput['content']) ? $postInput['content'] : '';
         $thumb = !empty($postInput['thumb']) ? $postInput['thumb'] : '';

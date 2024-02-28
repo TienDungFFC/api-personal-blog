@@ -12,8 +12,12 @@ class PostController extends Controller
     public function __construct(private PostService $post) {
     }
 
-    public function index() {
-        return PostResource::collection($this->post->getAll());
+    public function index(Request $request) {
+        $dataReq = $request->only('category');
+        if ($dataReq) {
+            return PostResource::collection($this->post->getPostByCate($dataReq['category']));
+        }
+        return PostResource::collection($this->post->index());
     }
 
     public function store(UpsertPostRequest $request) {
